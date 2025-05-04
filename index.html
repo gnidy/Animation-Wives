@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Top and Bottom Waves</title>
+  <style>
+
+    :root {
+        --color: rgb(102 51 153);
+        --color-r: 180;
+        --color-g: 212;
+        --color-b: 255;
+        }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color);
+    }
+
+    .waves-container {
+      position: fixed;
+      width: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .waves-container.top-wave {
+      top: -6px;
+      transform: rotate(180deg);
+    }
+
+    .waves-container.bottom-wave {
+      bottom: -6px;
+    }
+
+    .waves {
+      width: 100%;
+      height: 100px;
+    }
+
+    .parallax > use {
+      animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+    }
+
+    .parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+    .parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
+    .parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
+    .parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
+
+    @keyframes move-forever {
+      0%   { transform: translate3d(-90px, 0, 0); }
+      100% { transform: translate3d(85px, 0, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Wave -->
+  <div class="waves-container top-wave">
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+      </defs>
+      <g class="parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(var(--color-r),var(--color-g),var(--color-b),0.7)" />
+        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(var(--color-r),var(--color-g),var(--color-b),0.5)" />
+        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(var(--color-r),var(--color-g),var(--color-b),0.3)" />
+        <use xlink:href="#gentle-wave" x="48" y="7" fill="rgba(var(--color-r),var(--color-g),var(--color-b))" />
+      </g>
+    </svg>
+  </div>
+
+  <!-- Bottom Wave (Same HTML) -->
+  <div class="waves-container bottom-wave">
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+      </defs>
+      <g class="parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(var(--color-r),var(--color-g),var(--color-b),0.7)" />
+        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(var(--color-r),var(--color-g),var(--color-b),0.5)" />
+        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(var(--color-r),var(--color-g),var(--color-b),0.3)" />
+        <use xlink:href="#gentle-wave" x="48" y="7" fill="rgba(var(--color-r),var(--color-g),var(--color-b))" />
+      </g>
+    </svg>
+  </div>
+
+</body>
+</html>
