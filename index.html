@@ -4,61 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Top and Bottom Waves</title>
-  <style>
-
-    :root {
-        --color: rgb(102 51 153);
-        --color-r: 180;
-        --color-g: 212;
-        --color-b: 255;
-        }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--color);
-    }
-
-    .waves-container {
-      position: fixed;
-      width: 100%;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .waves-container.top-wave {
-      top: -6px;
-      transform: rotate(180deg);
-    }
-
-    .waves-container.bottom-wave {
-      bottom: -6px;
-    }
-
-    .waves {
-      width: 100%;
-      height: 100px;
-    }
-
-    .parallax > use {
-      animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
-    }
-
-    .parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
-    .parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
-    .parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
-    .parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
-
-    @keyframes move-forever {
-      0%   { transform: translate3d(-90px, 0, 0); }
-      100% { transform: translate3d(85px, 0, 0); }
-    }
-  </style>
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-
+  <div class="containerr">
   <!-- Top Wave -->
-  <div class="waves-container top-wave">
+  <!-- <div class="waves-container top-wave">
     <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
       <defs>
         <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
@@ -70,8 +22,7 @@
         <use xlink:href="#gentle-wave" x="48" y="7" fill="rgba(var(--color-r),var(--color-g),var(--color-b))" />
       </g>
     </svg>
-  </div>
-
+  </div> -->
   <!-- Bottom Wave (Same HTML) -->
   <div class="waves-container bottom-wave">
     <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
@@ -86,6 +37,45 @@
       </g>
     </svg>
   </div>
+  <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50  md:flex md:justify-between md:items-center">
+    <div class="max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex-shrink-0">
+          <a href="#" class="text-xl font-bold text-blue-600" aria-label="Brand Logo">Brand</a>
+        </div>
 
+        <!-- Menu Button for Mobile -->
+        <div class="md:hidden">
+          <button id="menu-btn" class="text-gray-700 focus:outline-none" aria-expanded="false" aria-controls="menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combined Menu -->
+    <ul id="menu" class="hidden md:flex flex-col md:flex-row md:space-x-6 px-4 pb-4 md:px-0 md:pb-0" role="menu">
+      <li role="menuitem">
+        <a href="#" class="block py-2 text-gray-700 hover:text-blue-600">Home</a>
+      </li>
+      <li role="menuitem">
+        <a href="#" class="block py-2 text-gray-700 hover:text-blue-600">About</a>
+      </li>
+      <li role="menuitem">
+        <a href="#" class="block py-2 text-gray-700 hover:text-blue-600">Services</a>
+      </li>
+      <li role="menuitem">
+        <a href="#" class="block py-2 text-gray-700 hover:text-blue-600">Contact</a>
+      </li>
+    </ul>
+  </nav>
+  
+</div>
+
+<script src="./script.js"></script>
 </body>
 </html>
