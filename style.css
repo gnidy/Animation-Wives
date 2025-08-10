@@ -1,215 +1,816 @@
-
-:root {
-    /* --color: black */
-    --color: #1e3a8a;
-    --color-r: 255;
-    --color-g: 255;
-    --color-b: 255;
-    --rain: #ffffff;
-    --black: rgba(0, 0, 0, 0); /* Transparent black */
-}
-    
-body {
+/* Modern CSS Reset */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
-  background-color: black;
-  /* background-color: var(--color); */
+  box-sizing: border-box;
 }
 
-.waves-container {
-  position: fixed;
+/* Base Variables */
+:root {
+  /* Day Theme Colors */
+  --day-sky-start: #87CEEB;
+  --day-sky-end: #1E90FF;
+  --day-sun: #FFD700;
+  --day-ocean: #1E90FF;
+  --day-boat: #8B4513;
+  --day-sail: #F5F5F5;
+  --day-text: #333;
+  
+  /* Night Theme Colors */
+  --night-sky-start: #0F2027;
+  --night-sky-end: #203A43;
+  --night-moon: #F0F0F0;
+  --night-ocean: #0A1128;
+  --night-boat: #5D4037;
+  --night-sail: #E0E0E0;
+  --night-text: #F5F5F5;
+  
+  /* Common */
+  --transition-time: 1.5s;
+  --easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* Base Styles */
+html, body {
   width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color var(--transition-time) var(--easing);
+}
+
+/* Theme Toggle Switch */
+.theme-toggle-container {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.theme-toggle {
+  display: none;
+}
+
+.theme-toggle-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80px;
+  height: 40px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-icons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color: var(--day-text);
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-ball {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 32px;
+  height: 32px;
+  background: var(--day-sun);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s var(--easing), background 0.3s ease;
+}
+
+.theme-toggle:checked + .theme-toggle-label .theme-toggle-ball {
+  transform: translateX(40px);
+  background: var(--night-moon);
+}
+
+.theme-toggle:checked + .theme-toggle-label .theme-toggle-icons {
+  color: var(--night-text);
+}
+
+/* Scene Container */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sky */
+.sky {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--day-sky-start), var(--day-sky-end));
+  transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background;
+}
+
+/* Celestial Body (Sun/Moon) */
+.celestial-body {
+  position: absolute;
+  top: 25%;
+  left: 20%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--day-sun);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 50px 20px rgba(255, 215, 0, 0.6);
+  transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+  will-change: transform, box-shadow, background;
+}
+
+.celestial-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), transparent 60%);
+  filter: blur(5px);
+  opacity: 0.8;
+  transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, background;
+}
+
+.celestial-craters {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.crater {
+  position: absolute;
+  background: rgba(200, 200, 200, 0.2);
+  border-radius: 50%;
+  transition: all var(--transition-time) var(--easing);
+}
+
+/* Night Mode Styles */
+.theme-night .sky {
+  background: linear-gradient(to bottom, var(--night-sky-start), var(--night-sky-end));
+}
+
+.theme-night .celestial-body {
+  background: var(--night-moon);
+  box-shadow: 0 0 30px 10px rgba(240, 240, 240, 0.3);
+}
+
+.theme-night .celestial-glow {
+  opacity: 0.3;
+}
+
+/* Waves */
+.waves {
+  position: absolute;
+  width: 100%;
+  height: 120px;
+  bottom: 0;
+  left: 0;
   overflow: hidden;
   z-index: 1;
 }
 
-.waves-container.top-wave {
-  top: -6px;
-  transform: rotate(180deg);
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C160,120 320,0 480,60 C640,120 800,0 960,60 C1120,120 1280,0 1440,60 L1440,120 L0,120 Z" fill="rgba(0, 119, 190, 0.7)"/></svg>') repeat-x;
+  background-size: 50% 100%;
+  animation: wave 15s linear infinite;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, background;
+  transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.waves-container.bottom-wave {
-  bottom: -6px;
+.wave-1 { top: 0; animation-duration: 20s; animation-delay: 0s; }
+.wave-2 { top: 15px; animation-duration: 15s; animation-delay: -5s; opacity: 0.7; }
+.wave-3 { top: 30px; animation-duration: 10s; animation-delay: -2s; opacity: 0.5; }
+.wave-4 { top: 45px; animation-duration: 15s; animation-delay: -4s; opacity: 0.4; }
+.wave-5 { top: 60px; animation-duration: 20s; animation-delay: -6s; opacity: 0.3; }
+
+.theme-night .wave {
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C160,120 320,0 480,60 C640,120 800,0 960,60 C1120,120 1280,0 1440,60 L1440,120 L0,120 Z" fill="rgba(10, 17, 40, 0.7)"/></svg>') repeat-x;
 }
 
-.waves {
-  width: 100%;
+@keyframes wave {
+  0% { transform: translateX(0) translateZ(0); }
+  100% { transform: translateX(-50%) translateZ(0); }
+}
+
+/* Optimized wave animation for mobile */
+@media (max-width: 768px) {
+  .waves {
+    height: 80px;
+  }
+  
+  .wave {
+    animation: wave 10s linear infinite;
+  }
+  
+  .wave-1 { animation-duration: 15s; }
+  .wave-2 { top: 10px; animation-duration: 12s; }
+  .wave-3 { top: 20px; animation-duration: 9s; }
+  .wave-4 { top: 30px; animation-duration: 12s; }
+  .wave-5 { top: 40px; animation-duration: 15s; }
+}
+
+/* Boat */
+/* Boat Container */
+.boat {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  z-index: 10;
+  animation: boatFloat 6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Masts */
+.mast {
+  position: absolute;
+  bottom: 30px;
+  background: #8B4513;
+  z-index: 5;
+  transform-origin: bottom center;
+  animation: mastSway 4s ease-in-out infinite;
+}
+
+.main-mast {
+  left: 60%;
+  width: 4px;
+  height: 120px;
+  animation-delay: -1s;
+}
+
+.mizzen-mast {
+  left: 30%;
+  width: 3px;
+  height: 90px;
+  animation-delay: -2s;
+}
+
+.mast-top {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #5D4037;
+  border-radius: 50%;
+}
+
+/* Sails */
+.sail {
+  position: absolute;
+  transform-origin: bottom center;
+  transition: all var(--transition-time) var(--easing);
+}
+
+.main-sail {
+  bottom: 30px;
+  left: -30px;
+  width: 60px;
   height: 100px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.9));
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
-.parallax > use {
-  animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+.jib {
+  bottom: 30px;
+  left: -70px;
+  width: 60px;
+  height: 80px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.7), rgba(255,255,255,0.8));
+  clip-path: polygon(100% 0%, 0% 100%, 100% 100%);
 }
 
-.parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
-.parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
-.parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
-.parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
+.mizzen {
+  bottom: 30px;
+  left: 10px;
+  width: 50px;
+  height: 70px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.9));
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
 
-@keyframes move-forever {
-  0%   { transform: translate3d(-90px, 0, 0); }
-  100% { transform: translate3d(85px, 0, 0); }
+.sail-detail {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 2px;
+}
+
+/* Hull and Deck */
+.hull {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 40px;
+  background: var(--day-boat);
+  border-radius: 5px 5px 20px 20px;
+  transition: all var(--transition-time) var(--easing);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 3;
+}
+
+.deck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.1);
+  border-radius: 5px 5px 20px 20px;
+  overflow: hidden;
+}
+
+.cabin {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 15px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+.railing {
+  position: absolute;
+  height: 5px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 2px;
+}
+
+.railing.front {
+  top: 5px;
+  left: 10px;
+  right: 60%;
+}
+
+.railing.back {
+  top: 5px;
+  left: 60%;
+  right: 10px;
+}
+
+/* Water effects */
+.bow-wave,
+.stern-wave {
+  position: absolute;
+  bottom: -5px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: waterRipple 3s ease-in-out infinite;
+}
+
+.bow-wave {
+  left: 25%;
+  width: 30px;
+  height: 10px;
+  animation-delay: 0s;
+}
+
+.stern-wave {
+  right: 25%;
+  width: 20px;
+  height: 8px;
+  animation-delay: -1.5s;
+}
+
+.theme-night .hull {
+  background: var(--night-boat);
+}
+
+.theme-night .sail::before {
+  border-bottom-color: var(--night-sail);
+}
+
+/* Animations */
+@keyframes boatFloat {
+  0%, 100% { 
+    transform: translateX(-50%) translateY(0) rotate(-1deg);
+  }
+  25% { 
+    transform: translateX(-50%) translateY(-5px) rotate(0.5deg);
+  }
+  50% { 
+    transform: translateX(-50%) translateY(-10px) rotate(1deg);
+  }
+  75% { 
+    transform: translateX(-50%) translateY(-5px) rotate(-0.5deg);
+  }
 }
 
 
- .containerr {
-    width: 100vw !important;
-    height: 100vh;
-    background: var(--black);
-    background-image: radial-gradient(4px 100px at 0px 235px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 235px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 117.5px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 252px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 252px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 126px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 150px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 150px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 75px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 253px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 253px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 126.5px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 204px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 204px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 102px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 134px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 134px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 67px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 179px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 179px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 89.5px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 299px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 299px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 149.5px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 215px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 215px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 107.5px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 281px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 281px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 140.5px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 158px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 158px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 79px, var(--rain) 100%, var(--black) 150%),
-      radial-gradient(4px 100px at 0px 210px, var(--rain), var(--black)),
-      radial-gradient(4px 100px at 300px 210px, var(--rain), var(--black)),
-      radial-gradient(1.5px 1.5px at 150px 105px, var(--rain) 100%, var(--black) 150%);
-    background-size:
-      300px 235px,
-      300px 235px,
-      300px 235px,
-      300px 252px,
-      300px 252px,
-      300px 252px,
-      300px 150px,
-      300px 150px,
-      300px 150px,
-      300px 253px,
-      300px 253px,
-      300px 253px,
-      300px 204px,
-      300px 204px,
-      300px 204px,
-      300px 134px,
-      300px 134px,
-      300px 134px,
-      300px 179px,
-      300px 179px,
-      300px 179px,
-      300px 299px,
-      300px 299px,
-      300px 299px,
-      300px 215px,
-      300px 215px,
-      300px 215px,
-      300px 281px,
-      300px 281px,
-      300px 281px,
-      300px 158px,
-      300px 158px,
-      300px 158px,
-      300px 210px,
-      300px 210px,
-      300px 210px;
-    animation: hi 150s linear infinite;
+
+#moon-dot-1 {
+  left: 10px;
+  top: 3px;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  z-index: 4;
+}
+
+#moon-dot-2 {
+  left: 2px;
+  top: 10px;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  z-index: 4;
+}
+
+#moon-dot-3 {
+  left: 16px;
+  top: 18px;
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  z-index: 4;
+}
+
+#light-ray-1 {
+  left: -8px;
+  top: -8px;
+  position: absolute;
+  width: 43px;
+  height: 43px;
+  z-index: -1;
+  fill: white;
+  opacity: 10%;
+}
+
+#light-ray-2 {
+  left: -50%;
+  top: -50%;
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  z-index: -1;
+  fill: white;
+  opacity: 10%;
+}
+
+#light-ray-3 {
+  left: -18px;
+  top: -18px;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  z-index: -1;
+  fill: white;
+  opacity: 10%;
+}
+
+.cloud-light {
+  position: absolute;
+  fill: #eee;
+  animation-name: cloud-move;
+  animation-duration: 6s;
+  animation-iteration-count: infinite;
+}
+
+.cloud-dark {
+  position: absolute;
+  fill: #ccc;
+  animation-name: cloud-move;
+  animation-duration: 6s;
+  animation-iteration-count: infinite;
+  animation-delay: 1s;
+}
+
+#cloud-1 {
+  left: 30px;
+  top: 15px;
+  width: 40px;
+}
+
+#cloud-2 {
+  left: 44px;
+  top: 10px;
+  width: 20px;
+}
+
+#cloud-3 {
+  left: 18px;
+  top: 24px;
+  width: 30px;
+}
+
+#cloud-4 {
+  left: 36px;
+  top: 18px;
+  width: 40px;
+}
+
+#cloud-5 {
+  left: 48px;
+  top: 14px;
+  width: 20px;
+}
+
+#cloud-6 {
+  left: 22px;
+  top: 26px;
+  width: 30px;
+}
+
+@keyframes cloud-move {
+  0% {
+    transform: translateX(0px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  80% {
+    transform: translateX(-4px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+
+/* Hide moon dots by default */
+.moon-dot {
+  opacity: 0;
+  position: absolute;
+  background: #888;
+  border-radius: 50%;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Show moon dots in night mode */
+.night-mode .moon-dot {
+  opacity: 0.9;
+}
+
+/* Position moon dots */
+#moon-dot-1 { top: 30%; left: 30%; width: 15px; height: 15px; }
+#moon-dot-2 { top: 50%; right: 20%; width: 10px; height: 10px; }
+#moon-dot-3 { bottom: 20%; left: 40%; width: 8px; height: 8px; }
+
+/* Stars */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+}
+
+.star {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: twinkle 3s infinite ease-in-out;
+  will-change: transform, opacity;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.theme-night .star {
+  opacity: 1 !important;
+}
+.theme-night .stars {
+  opacity: 1 !important;
+}
+
+@keyframes twinkle {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+/* Clouds */
+
+.night-mode .cloud {
+  filter: brightness(0.6);
+}
+
+/* Moon Dots */
+.moon-dot {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  fill: var(--moon-color);
+}
+
+.night-mode .moon-dot {
+  opacity: 0.9;
+}
+
+/* Light Rays */
+.light-ray {
+  opacity: 0.7;
+  transition: opacity 0.5s ease-in-out;
+  fill: var(--sun-color);
+}
+
+.night-mode .light-ray {
+  opacity: 0;
+}
+
+/* Scene Container */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sky */
+.sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background: linear-gradient(to bottom, #1e3c72 0%, #4b6cb7 50%, #87CEEB 100%);
+  z-index: 1;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Boat */
+.boat {
+  position: absolute;
+  bottom: 50%;
+  left: 30%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 100px;
+  z-index: -1;
+  animation: boatFloat 6s infinite ease-in-out;
+}
+
+.hull {
+  position: absolute;
+  bottom: 0;
+  width: 150px;
+  height: 40px;
+  background: #8B4513;
+  border-radius: 0 0 40px 40px;
+  z-index: 2;
+}
+
+.sail {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  width: 2px;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 0px solid transparent;
+  border-bottom: 80px solid #f8f8f8;
+  transform-origin: bottom center;
+  transform: rotate(-26deg);
+  z-index: 1;
+}
+
+.sail-2 {
+  left: 70%;
+  border-left: 0px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 80px solid #f0f0f0;
+  transform: rotate(10deg);
+}
+
+
+/* Ocean with gentle animation */
+.ocean {
+  position: absolute;
+  bottom: -3%;
+  height: 20%;
+  width: 100%;
+  z-index: 1;
+  animation: boatFloat 6s infinite ease-in-out;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom, var(--day-ocean), #1E3A8A);
+  transition: background var(--transition-time) ease-in-out;
+}
+
+.theme-night .ocean {
+  background: color-mix(in srgb, var(--night-ocean) 85%, transparent);
+}
+
+
+/* Cloud Styles */
+.cloud {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  filter: blur(5px);
+  z-index: 22222220;
+  animation: float 30s linear infinite;
+  transition: all var(--transition-time) ease-in-out;
+}
+
+.cloud-1 {
+  width: 100px;
+  height: 40px;
+  top: 15%;
+  left: 10%;
+  animation-duration: 40s;
+}
+
+.cloud-2 {
+  width: 150px;
+  height: 60px;
+  top: 25%;
+  right: 10%;
+  animation-duration: 50s;
+  animation-delay: -10s;
+}
+
+.cloud-3 {
+  width: 80px;
+  height: 30px;
+  top: 30%;
+  left: 30%;
+  animation-duration: 45s;
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  0% { 
+    transform: translateX(100vw) translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% { 
+    transform: translateX(-150px) translateY(0);
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .boat {
+    transform: scale(0.8) translateX(-50%) !important;
   }
   
-  @keyframes hi {
-    0% {
-      background-position:
-        0px 220px,
-        3px 220px,
-        151.5px 337.5px,
-        25px 24px,
-        28px 24px,
-        176.5px 150px,
-        50px 16px,
-        53px 16px,
-        201.5px 91px,
-        75px 224px,
-        78px 224px,
-        226.5px 350.5px,
-        100px 19px,
-        103px 19px,
-        251.5px 121px,
-        125px 120px,
-        128px 120px,
-        276.5px 187px,
-        150px 31px,
-        153px 31px,
-        301.5px 120.5px,
-        175px 235px,
-        178px 235px,
-        326.5px 384.5px,
-        200px 121px,
-        203px 121px,
-        351.5px 228.5px,
-        225px 224px,
-        228px 224px,
-        376.5px 364.5px,
-        250px 26px,
-        253px 26px,
-        401.5px 105px,
-        275px 75px,
-        278px 75px,
-        426.5px 180px;
-    }
-    to {
-      background-position:
-        0px 6800px,
-        3px 6800px,
-        151.5px 6917.5px,
-        25px 13632px,
-        28px 13632px,
-        176.5px 13758px,
-        50px 5416px,
-        53px 5416px,
-        201.5px 5491px,
-        75px 17175px,
-        78px 17175px,
-        226.5px 17301.5px,
-        100px 5119px,
-        103px 5119px,
-        251.5px 5221px,
-        125px 8428px,
-        128px 8428px,
-        276.5px 8495px,
-        150px 9876px,
-        153px 9876px,
-        301.5px 9965.5px,
-        175px 13391px,
-        178px 13391px,
-        326.5px 13540.5px,
-        200px 14741px,
-        203px 14741px,
-        351.5px 14848.5px,
-        225px 18770px,
-        228px 18770px,
-        376.5px 18910.5px,
-        250px 5082px,
-        253px 5082px,
-        401.5px 5161px,
-        275px 6375px,
-        278px 6375px,
-        426.5px 6480px;
-    }
+  .cloud {
+    transform: scale(0.7);
   }
-  
+}
+
+@keyframes boatFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0.5deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0.5deg);
+  }
+  75% {
+    transform: translateY(5px) rotate(-0.5deg);
+  }
+} 
